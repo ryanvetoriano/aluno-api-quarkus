@@ -1,5 +1,5 @@
-# Use uma imagem com OpenJDK 21
-FROM eclipse-temurin:21-jdk-focal
+# Use a imagem com OpenJDK 21 da Adoptium
+FROM adoptium:21-jdk-hotspot
 
 # Instalar Maven
 RUN apt-get update && \
