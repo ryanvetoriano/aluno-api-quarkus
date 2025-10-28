@@ -1,22 +1,22 @@
-# Use uma imagem com OpenJDK, mas sem Maven
-FROM openjdk:17-jdk-slim AS build
+# Use uma imagem com OpenJDK 21
+FROM eclipse-temurin:21-jdk-focal
 
-# Instalar Maven na imagem
+# Instalar Maven
 RUN apt-get update && \
     apt-get install -y maven && \
     apt-get clean
 
-# Diretório de trabalho
+# Defina o diretório de trabalho
 WORKDIR /app
 
 # Copiar os arquivos do projeto
 COPY . .
 
-# Instalar as dependências e gerar a lista de dependências
-RUN mvn -B -DskipTests clean dependency:list install -DoutputFile=target/mvn-dependency-list.log
+# Instalar as dependências e criar o build
+RUN mvn clean install -DskipTests
 
-# Continuar com o resto do seu Dockerfile, por exemplo:
-# RUN mvn package
+# Expor a porta padrão do Quarkus
+EXPOSE 8080
 
-# Run the quarkus app 
-CMD ["sh", "-c", "java -jar target/quarkus-app/quarkus-run.jar"]
+# Comando para rodar a aplicação
+CMD ["mvn", "quarkus:dev"]
